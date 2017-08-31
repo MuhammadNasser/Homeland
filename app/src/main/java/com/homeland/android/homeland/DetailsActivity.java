@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,10 @@ public class DetailsActivity extends AppCompatActivity {
     RelativeLayout relativeLayoutLoading;
     @BindView(R.id.pagerSlidingTabStrip)
     PagerSlidingTabStrip pagerSlidingTabStrip;
+    @BindView(R.id.LinearLayoutSocial)
+    LinearLayout LinearLayoutSocial;
+    @BindView(R.id.textView)
+    TextView textView;
 
     private TextView textViewActivityTitle;
     private DetailsType detailsType;
@@ -152,10 +157,8 @@ public class DetailsActivity extends AppCompatActivity {
                 textViewPrice.setVisibility(View.INVISIBLE);
                 textViewCode.setVisibility(View.INVISIBLE);
                 textViewTitle.setVisibility(View.INVISIBLE);
-
-                imageViewInstagram.setOnClickListener(new Listeners());
-                imageViewFacebook.setOnClickListener(new Listeners());
-                imageViewTwitter.setOnClickListener(new Listeners());
+                LinearLayoutSocial.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     textViewDescription.setText(Html.fromHtml(car.getDescription(), Html.FROM_HTML_OPTION_USE_CSS_COLORS));
@@ -179,11 +182,9 @@ public class DetailsActivity extends AppCompatActivity {
                 imageViewSave.setVisibility(View.GONE);
                 textViewPrice.setVisibility(View.INVISIBLE);
                 textViewCode.setVisibility(View.INVISIBLE);
-                textViewTitle.setText(service.getDescription());
-
-                imageViewInstagram.setOnClickListener(new Listeners());
-                imageViewFacebook.setOnClickListener(new Listeners());
-                imageViewTwitter.setOnClickListener(new Listeners());
+                LinearLayoutSocial.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+                textViewTitle.setText(service.getTitle());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     textViewDescription.setText(Html.fromHtml(service.getDescription(), Html.FROM_HTML_OPTION_USE_CSS_COLORS));
@@ -280,7 +281,7 @@ public class DetailsActivity extends AppCompatActivity {
             if (v == imageViewSave) {
                 new CheckSavedData().execute();
             } else if (v == imageViewFacebook) {
-                if (!link.isEmpty()) {
+                if (!link.isEmpty() || link != null) {
                     intent.setData(Uri.parse(link));
                     startActivity(intent);
                 } else {
@@ -288,7 +289,7 @@ public class DetailsActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else if (v == imageViewTwitter) {
-                if (!link.isEmpty()) {
+                if (!link.isEmpty() || link != null) {
                     intent.setData(Uri.parse(link));
                     startActivity(intent);
                 } else {
@@ -296,7 +297,7 @@ public class DetailsActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else if (v == imageViewInstagram) {
-                if (!link.isEmpty()) {
+                if (!link.isEmpty() || link != null) {
                     intent.setData(Uri.parse(link));
                     startActivity(intent);
                 } else {

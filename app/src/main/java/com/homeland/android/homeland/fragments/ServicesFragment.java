@@ -78,7 +78,7 @@ public class ServicesFragment extends Fragment {
             RecyclerView.ViewHolder holder;
 
             //inflater your layout and pass it to view holder
-            view = inflater.inflate(R.layout.cars_list_item, viewGroup, false);
+            view = inflater.inflate(R.layout.home_list_item, viewGroup, false);
             holder = new ItemHolder(view);
 
             return holder;
@@ -106,7 +106,12 @@ public class ServicesFragment extends Fragment {
 
             @BindView(R.id.imageViewCover)
             ImageView imageViewCover;
-
+            @BindView(R.id.textViewPrice)
+            TextView textViewPrice;
+            @BindView(R.id.textViewCode)
+            TextView textViewCode;
+            @BindView(R.id.textViewTitle)
+            TextView textViewTitle;
             @BindView(R.id.textViewDescription)
             TextView textViewDescription;
 
@@ -139,6 +144,10 @@ public class ServicesFragment extends Fragment {
                 } else {
                     imageViewCover.setImageResource(R.drawable.ic_warning);
                 }
+
+                textViewTitle.setText(service.getTitle());
+                textViewPrice.setVisibility(View.GONE);
+                textViewCode.setVisibility(View.GONE);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     textViewDescription.setText(Html.fromHtml(service.getDescription(), Html.FROM_HTML_OPTION_USE_CSS_COLORS));
