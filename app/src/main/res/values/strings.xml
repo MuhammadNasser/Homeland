@@ -1,0 +1,56 @@
+<resources>
+
+    <string name="app_name">Homeland</string>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="number">000000</string>
+    <string name="description">3 Bedrooms (1 master), 3 bathrooms, kitchen, lounge, salon, (60 m2) terrace with garden, Central airconditioner </string>
+    <string name="title">Title</string>
+    <string name="facebook_link">facebook link</string>
+    <string name="property_code">Code:</string>
+    <string name="price">1000000 EGP</string>
+    <string name="for_more_info">For more Information:</string>
+    <string name="or">or</string>
+    <string name="call_customer_service">Call Customer Service</string>
+    <string name="address_">Address:</string>
+    <string name="phone_">Phone:</string>
+    <string name="email_">e-mail:</string>
+    <string name="who_we_are">who are we?</string>
+    <string name="our_mission">Our mission</string>
+    <string name="app_icon">app_icon</string>
+    <string name="egp">EGP</string>
+    <string name="save_icon">Save Icon</string>
+    <string name="saved">Saved</string>
+    <string name="un_saved">Unsaved</string>
+    <string name="content_authority">com.homeland.android.homeland</string>
+
+
+    <string-array name="slideMenuItems">
+        <item>Home</item>
+        <item>Services</item>
+        <item>About us</item>
+        <item>Contact us</item>
+    </string-array>
+
+    <string-array name="home_tabs_text">
+        <item>Apartments</item>
+        <item>Cars</item>
+        <item>Hotels</item>
+    </string-array>
+
+    <string-array name="home_tabs_icons_white">
+        <item>@drawable/ic_properties</item>
+        <item>@drawable/ic_cars</item>
+        <item>@drawable/ic_hotels</item>
+    </string-array>
+
+    <string-array name="home_tabs_icons_gray">
+        <item>@drawable/ic_properties_gray</item>
+        <item>@drawable/ic_cars_gray</item>
+        <item>@drawable/ic_hotels_gray</item>
+    </string-array>
+</resources>
+
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="layout">
+
+    <ImageView
+        android:id="@+id/imageViewCover"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="20dp"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_properties_gray" />
+
+    <com.homeland.android.homeland.views.TextViewRobotoRegular
+        android:id="@+id/textViewCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:lines="1"
+        android:textColor="@color/grayDark"
+        android:textSize="@dimen/textSizeSmall"
+        tools:ignore="RelativeOverlap"
+        tools:text="@string/property_code" />
+
+
+    <com.homeland.android.homeland.views.TextViewRobotoRegular
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/imageViewCover"
+        android:layout_toRightOf="@+id/imageViewCover"
+        android:gravity="center"
+        android:lines="1"
+        android:textColor="@color/grayDark"
+        android:textSize="@dimen/textSizeSmall"
+        tools:text="@string/app_name" />
+
+    <com.homeland.android.homeland.views.TextViewRobotoRegular
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTitle"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/imageViewCover"
+        android:layout_toRightOf="@+id/imageViewCover"
+        android:gravity="center"
+        android:textColor="@color/grayDark"
+        android:textSize="@dimen/textSizeSmall"
+        tools:text="@string/app_name" />
+</RelativeLayout>
