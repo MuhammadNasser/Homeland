@@ -44,10 +44,9 @@ public class HotelsFragment extends Fragment implements LoaderManager.LoaderCall
 
     final int LOADER_ID = 1;
     private final String TAG = HotelsFragment.class.getSimpleName();
-
+    public ArrayList<Property> properties;
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
-
     private MainActivity activity;
 
     @Override
@@ -59,8 +58,18 @@ public class HotelsFragment extends Fragment implements LoaderManager.LoaderCall
 
         ButterKnife.bind(this, view);
 
-        Content content = new Content();
-        content.getHotels();
+        if (savedInstanceState != null) {
+            properties = savedInstanceState.getParcelableArrayList(IS_PROPERTY);
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setHasFixedSize(false);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(new HotelsFragment.HotelsAdapter(activity, properties));
+        } else {
+            Content content = new Content();
+            content.getHotels();
+        }
 
         return view;
     }
@@ -89,11 +98,20 @@ public class HotelsFragment extends Fragment implements LoaderManager.LoaderCall
         recyclerView.setHasFixedSize(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new HotelsFragment.HotelsAdapter(activity, properties));
+
+        HotelsFragment.this.properties = new ArrayList<>();
+        HotelsFragment.this.properties = properties;
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(IS_PROPERTY, properties);
+        super.onSaveInstanceState(outState);
     }
 
     public class HotelsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -137,7 +155,6 @@ public class HotelsFragment extends Fragment implements LoaderManager.LoaderCall
             return properties.size();
         }
 
-
         public class ItemHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.imageViewCover)
@@ -174,7 +191,7 @@ public class HotelsFragment extends Fragment implements LoaderManager.LoaderCall
 
                 if (!property.getImagesLinks().isEmpty()) {
                     Picasso.with(activity).load(property.getImagesLinks().get(0).getImageUrl()).
-                            placeholder(R.drawable.placeholder).
+                            placeholder(R.drawable.placeholder).fit().centerCrop().fit().centerCrop().
                             error(R.drawable.ic_warning).
                             into(imageViewCover);
                 } else {
@@ -216,10 +233,13 @@ public class HotelsFragment extends Fragment implements LoaderManager.LoaderCall
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setHasFixedSize(false);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setAdapter(new HotelsAdapter(activity, properties));
+                recyclerView.setAdapter(new HotelsFragment.HotelsAdapter(activity, properties));
+
+                HotelsFragment.this.properties = new ArrayList<>();
+                HotelsFragment.this.properties = properties;
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-                if (message.contains("No active internet connection")) {
+                if (message.contains(activity.getResources().getString(R.string.internet_connecction))) {
                     activity.getSupportLoaderManager().restartLoader(LOADER_ID, null, HotelsFragment.this);
                 }
             }

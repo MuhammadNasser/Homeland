@@ -44,10 +44,9 @@ public class CarsFragment extends Fragment implements LoaderManager.LoaderCallba
 
     final int LOADER_ID = 1;
     private final String TAG = CarsFragment.class.getSimpleName();
-
+    public ArrayList<Car> cars;
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
-
     private MainActivity activity;
 
     @Override
@@ -94,6 +93,9 @@ public class CarsFragment extends Fragment implements LoaderManager.LoaderCallba
         recyclerView.setHasFixedSize(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new CarsAdapter(activity, cars));
+
+        CarsFragment.this.cars = new ArrayList<>();
+        CarsFragment.this.cars = cars;
     }
 
 
@@ -169,7 +171,7 @@ public class CarsFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 if (!car.getImages().isEmpty()) {
                     Picasso.with(activity).load(car.getImages().get(0).getImageUrl()).
-                            placeholder(R.drawable.placeholder).
+                            placeholder(R.drawable.placeholder).fit().centerCrop().
                             error(R.drawable.ic_warning).
                             into(imageViewCover);
                 } else {
@@ -208,10 +210,13 @@ public class CarsFragment extends Fragment implements LoaderManager.LoaderCallba
                 recyclerView.setHasFixedSize(false);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(new CarsAdapter(activity, cars));
+
+                CarsFragment.this.cars = new ArrayList<>();
+                CarsFragment.this.cars = cars;
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
 
-                if (message.contains("No active internet connection")) {
+                if (message.contains(activity.getResources().getString(R.string.internet_connecction))) {
                     activity.getSupportLoaderManager().restartLoader(LOADER_ID, null, CarsFragment.this);
                 }
             }

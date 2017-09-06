@@ -1,6 +1,8 @@
 package com.homeland.android.homeland.models;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.homeland.android.homeland.data.DataContract;
 
@@ -15,7 +17,7 @@ import java.util.ArrayList;
  * Created by Muhammad on 8/19/2017
  */
 
-public class Property implements Serializable {
+public class Property implements Parcelable {
 
     private String id;
     private String title;
@@ -60,6 +62,30 @@ public class Property implements Serializable {
         this.price = cursor.getString(DataContract.DataEntry.COLUMN_PRICE_PROPERTY_CURSOR);
     }
 
+    protected Property(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        code = in.readString();
+        description = in.readString();
+        facebook = in.readString();
+        twitter = in.readString();
+        instagram = in.readString();
+        price = in.readString();
+        imagesLinks = in.createTypedArrayList(Image.CREATOR);
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
+
     public String getId() {
         return id;
     }
@@ -94,5 +120,23 @@ public class Property implements Serializable {
 
     public ArrayList<Image> getImagesLinks() {
         return imagesLinks;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(title);
+        parcel.writeString(code);
+        parcel.writeString(description);
+        parcel.writeString(facebook);
+        parcel.writeString(twitter);
+        parcel.writeString(instagram);
+        parcel.writeString(price);
+        parcel.writeTypedList(imagesLinks);
     }
 }

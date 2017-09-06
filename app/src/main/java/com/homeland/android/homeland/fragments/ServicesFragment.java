@@ -38,10 +38,8 @@ import static com.homeland.android.homeland.DetailsActivity.ITEM_TYPE;
 public class ServicesFragment extends Fragment {
 
     private final String TAG = ServicesFragment.class.getSimpleName();
-
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
-
     private MainActivity activity;
 
     @Override
@@ -138,7 +136,7 @@ public class ServicesFragment extends Fragment {
 
                 if (!service.getImage().isEmpty()) {
                     Picasso.with(activity).load(service.getImage()).
-                            placeholder(R.drawable.placeholder).
+                            placeholder(R.drawable.placeholder).fit().centerCrop().
                             error(R.drawable.ic_warning).
                             into(imageViewCover);
                 } else {
@@ -181,6 +179,7 @@ public class ServicesFragment extends Fragment {
                 recyclerView.setHasFixedSize(false);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(new ServicesAdapter(activity, services));
+
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }

@@ -1,10 +1,12 @@
 package com.homeland.android.homeland;
 
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,10 +21,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.homeland.android.homeland.fragments.AboutUsFragment;
 import com.homeland.android.homeland.fragments.CarsFragment;
@@ -65,7 +65,16 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout.addOnTabSelectedListener(this);
 
         addTabs();
-        replaceFragment(0);
+
+        if (savedInstanceState != null) {
+            int currentPos = savedInstanceState.getInt("currentPos");
+            TabLayout.Tab tab = tabLayout.getTabAt(currentPos);
+            if (tab != null) {
+                tab.select();
+            }
+        } else {
+            replaceFragment(0);
+        }
 
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         firebaseAnalytics.setAnalyticsCollectionEnabled(true);
@@ -74,9 +83,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         adView.loadAd(adRequest);
-
     }
-
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -131,6 +138,22 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        int selectedTabPosition = tabLayout.getSelectedTabPosition();
+        outState.putInt("currentPos", selectedTabPosition);
+        super.onSaveInstanceState(outState);
+    }
 
     public void isLoading(boolean isLoading) {
         relativeLayoutLoading.setVisibility(isLoading ? View.VISIBLE : View.GONE);
@@ -195,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         String[] tabsText = getResources().getStringArray(R.array.home_tabs_text);
 
         Fragment fragment;
-        String fragmentTitle = "";
+        String fragmentTitle;
 
         switch (position) {
 

@@ -1,10 +1,11 @@
 package com.homeland.android.homeland.widget;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
@@ -22,6 +23,7 @@ import static com.homeland.android.homeland.data.DataContract.DataEntry.PROPERTY
 
 
 public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
+
     private Context context;
     private ArrayList<Property> properties = new ArrayList<>();
 
@@ -29,18 +31,20 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
         this.context = context;
     }
 
-
     @Override
     public void onCreate() {
+        try {
+            new FavoritesProperties(context).execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDataSetChanged() {
-        try {
-            new FavoritesProperties(context).execute().get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.e("ExecutionException: ", String.valueOf(e));
-        }
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        int appWidgetIds[] = manager.getAppWidgetIds(new ComponentName(context, HomelandWidgetProvider.class));
+        manager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetListView);
     }
 
     @Override
@@ -49,19 +53,16 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
 
     @Override
     public int getCount() {
-        return properties.size();
+        int size = properties.size();
+        return size;
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
 
-
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.home_list_item);
-
-        views.setImageViewResource(R.id.imageViewCover, R.drawable.bg_property_1);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_item);
 
         views.setTextViewText(R.id.textViewTitle, properties.get(position).getTitle());
-        views.setTextViewText(R.id.textViewPrice, properties.get(position).getPrice());
         views.setTextViewText(R.id.textViewCode, properties.get(position).getCode());
         views.setTextViewText(R.id.textViewDescription, properties.get(position).getDescription());
 
@@ -82,7 +83,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return properties.size();
+        return 1;
     }
 
     @Override
@@ -139,8 +140,8 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Property> Propertys) {
-            if (Propertys != null) {
+        protected void onPostExecute(ArrayList<Property> properties) {
+            if (properties != null) {
                 WidgetRemoteViewsFactory.this.properties = properties;
             }
         }

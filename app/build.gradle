@@ -2,6 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'homeland'
+            keyPassword '01129273047'
+            storeFile file("homelandKeyStore.jks")
+            storePassword '01129273047'
+        }
+    }
+
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
     defaultConfig {

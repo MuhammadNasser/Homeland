@@ -1,5 +1,8 @@
 package com.homeland.android.homeland.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,7 +12,7 @@ import java.io.Serializable;
  * Created by Muhammad on 8/19/2017
  */
 
-public class Service implements Serializable {
+public class Service implements Parcelable {
 
     private String id;
     private String title;
@@ -22,6 +25,25 @@ public class Service implements Serializable {
         this.description = jsonObject.optString("description");
         this.image = jsonObject.optString("image");
     }
+
+    protected Service(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        description = in.readString();
+        image = in.readString();
+    }
+
+    public static final Creator<Service> CREATOR = new Creator<Service>() {
+        @Override
+        public Service createFromParcel(Parcel in) {
+            return new Service(in);
+        }
+
+        @Override
+        public Service[] newArray(int size) {
+            return new Service[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -37,5 +59,18 @@ public class Service implements Serializable {
 
     public String getImage() {
         return image;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeString(image);
     }
 }

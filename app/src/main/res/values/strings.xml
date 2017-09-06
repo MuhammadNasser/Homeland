@@ -25,6 +25,9 @@
     <string name="saved">Saved</string>
     <string name="un_saved">Unsaved</string>
     <string name="content_authority">com.homeland.android.homeland</string>
+    <string name="internet_connecction">No active internet connection</string>
+    <string name="twitter_link">twitter link</string>
+    <string name="instagram_link">instagram link</string>
 
 
     <string-array name="slideMenuItems">

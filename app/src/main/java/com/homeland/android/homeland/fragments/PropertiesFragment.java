@@ -49,6 +49,8 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
     RecyclerView recyclerView;
 
     private MainActivity activity;
+    public ArrayList<Property> properties;
+
 
 
     @Override
@@ -90,6 +92,9 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
         recyclerView.setHasFixedSize(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(new PropertiesAdapter(activity, properties));
+
+        PropertiesFragment.this.properties = new ArrayList<>();
+        PropertiesFragment.this.properties = properties;
     }
 
     @Override
@@ -172,7 +177,7 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
 
                 if (!property.getImagesLinks().isEmpty()) {
                     Picasso.with(activity).load(property.getImagesLinks().get(0).getImageUrl()).
-                            placeholder(R.drawable.placeholder).
+                            placeholder(R.drawable.placeholder).fit().centerCrop().
                             error(R.drawable.ic_warning).
                             into(imageViewCover);
                 } else {
@@ -214,9 +219,12 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
                 recyclerView.setHasFixedSize(false);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(new PropertiesAdapter(activity, properties));
+
+                PropertiesFragment.this.properties = new ArrayList<>();
+                PropertiesFragment.this.properties = properties;
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-                if (message.contains("No active internet connection")) {
+                if (message.contains(activity.getResources().getString(R.string.internet_connecction))) {
                     activity.getSupportLoaderManager().restartLoader(LOADER_ID, null, PropertiesFragment.this);
                 }
             }

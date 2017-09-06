@@ -93,9 +93,9 @@ public class DetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         detailsType = (DetailsType) getIntent().getSerializableExtra(ITEM_TYPE);
-        car = (Car) getIntent().getSerializableExtra(IS_CAR);
-        property = (Property) getIntent().getSerializableExtra(IS_PROPERTY);
-        service = (Service) getIntent().getSerializableExtra(IS_SERVICE);
+        car = getIntent().getParcelableExtra(IS_CAR);
+        property = getIntent().getParcelableExtra(IS_PROPERTY);
+        service = getIntent().getParcelableExtra(IS_SERVICE);
 
         initializeData();
 
@@ -434,7 +434,7 @@ public class DetailsActivity extends AppCompatActivity {
             ImageView imageViewCover = (ImageView) itemView.findViewById(R.id.imageViewCover);
 
             Picasso.with(DetailsActivity.this).load(images.get(position).getImageUrl()).
-                    placeholder(R.drawable.placeholder).
+                    placeholder(R.drawable.placeholder).fit().centerCrop().
                     error(R.drawable.ic_warning).
                     into(imageViewCover);
 
