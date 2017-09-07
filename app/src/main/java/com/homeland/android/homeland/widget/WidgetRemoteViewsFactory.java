@@ -69,7 +69,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
 
         Property property = properties.get(position);
 
-        Intent intent = new Intent(context, DetailsActivity.class);
+        Intent intent = new Intent();
         intent.putExtra(IS_PROPERTY, property);
         intent.putExtra(ITEM_TYPE, DetailsActivity.DetailsType.Properties);
         views.setOnClickFillInIntent(R.id.relativeLayout, intent);
@@ -84,7 +84,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 1;
+        return 2;
     }
 
     @Override

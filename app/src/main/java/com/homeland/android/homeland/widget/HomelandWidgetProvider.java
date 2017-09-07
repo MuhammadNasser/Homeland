@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.homeland.android.homeland.DetailsActivity;
 import com.homeland.android.homeland.MainActivity;
 import com.homeland.android.homeland.R;
 
@@ -30,7 +31,7 @@ public class HomelandWidgetProvider extends AppWidgetProvider {
             Intent intent = new Intent(context, WidgetRemoteViewsService.class);
             views.setRemoteAdapter(R.id.widgetListView, intent);
 
-            Intent clickIntentTemplate = new Intent(context, MainActivity.class);
+            Intent clickIntentTemplate = new Intent(context, DetailsActivity.class);
             PendingIntent clickPendingIntentTemplate = PendingIntent.getActivity(context, 0, clickIntentTemplate, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.widgetListView, clickPendingIntentTemplate);
 
