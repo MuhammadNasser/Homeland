@@ -33,18 +33,19 @@ public class WidgetRemoteViewsFactory implements RemoteViewsFactory {
 
     @Override
     public void onCreate() {
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        int appWidgetIds[] = manager.getAppWidgetIds(new ComponentName(context, HomelandWidgetProvider.class));
+        manager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetListView);
+    }
+
+    @Override
+    public void onDataSetChanged() {
+
         try {
             new FavoritesProperties(context).execute().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDataSetChanged() {
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        int appWidgetIds[] = manager.getAppWidgetIds(new ComponentName(context, HomelandWidgetProvider.class));
-        manager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetListView);
     }
 
     @Override

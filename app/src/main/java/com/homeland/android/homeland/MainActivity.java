@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -62,18 +61,19 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         AdView adView = (AdView) findViewById(R.id.adView);
         relativeLayoutLoading = (RelativeLayout) findViewById(R.id.relativeLayoutLoading);
-        tabLayout.addOnTabSelectedListener(this);
 
         addTabs();
 
         if (savedInstanceState != null) {
+            currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, "currentFragment");
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, currentFragment).commit();
             int currentPos = savedInstanceState.getInt("currentPos");
             TabLayout.Tab tab = tabLayout.getTabAt(currentPos);
             if (tab != null) {
                 tab.select();
             }
         } else {
-            replaceFragment(0);
+            replaceFragment(-1);
         }
 
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         adView.loadAd(adRequest);
+        tabLayout.addOnTabSelectedListener(this);
     }
 
     @Override
@@ -121,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-
         // Set up the drawer.
         ActionBar actionBar = mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         // Set up the drawer.
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
-
     }
 
     @Override
@@ -144,14 +143,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         int selectedTabPosition = tabLayout.getSelectedTabPosition();
         outState.putInt("currentPos", selectedTabPosition);
+        getSupportFragmentManager().putFragment(outState, "currentFragment", currentFragment);
         super.onSaveInstanceState(outState);
     }
 
@@ -221,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         String fragmentTitle;
 
         switch (position) {
-
             case -3:
                 fragment = new HotelsFragment();
                 fragmentTitle = tabsText[2];

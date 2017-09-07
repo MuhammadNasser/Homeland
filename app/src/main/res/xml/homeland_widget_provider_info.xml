@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:initialKeyguardLayout="@layout/homeland_widget_prvider"
-    android:initialLayout="@layout/homeland_widget_prvider"
+    android:initialLayout="@layout/widget_list_item"
     android:minHeight="100dp"
     android:minWidth="200dp"
     android:previewImage="@drawable/homeland_logo"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="86400000"
-    android:widgetCategory="home_screen"
-    tools:targetApi="jelly_bean_mr1" />
+    android:updatePeriodMillis="1800000" />

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -42,16 +44,14 @@ import static com.homeland.android.homeland.DetailsActivity.ITEM_TYPE;
 
 public class PropertiesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    final static String BUNDLE_RECYCLER_LAYOUT = "propertiesfragment.recycler.layout";
+
     final int LOADER_ID = 1;
     private final String TAG = PropertiesFragment.class.getSimpleName();
-
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
-
+    Parcelable savedRecyclerLayoutState;
     private MainActivity activity;
-    public ArrayList<Property> properties;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,10 +62,39 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
 
         ButterKnife.bind(this, view);
 
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
         Content content = new Content();
         content.getProperties();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (savedRecyclerLayoutState != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerView.getLayoutManager().onSaveInstanceState());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -86,15 +115,8 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
             } while (cursor.moveToNext());
             cursor.close();
         }
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new PropertiesAdapter(activity, properties));
 
-        PropertiesFragment.this.properties = new ArrayList<>();
-        PropertiesFragment.this.properties = properties;
+        recyclerView.setAdapter(new PropertiesAdapter(activity, properties));
     }
 
     @Override
@@ -213,15 +235,7 @@ public class PropertiesFragment extends Fragment implements LoaderManager.Loader
         protected void onPostExecuteGetProperties(ActionType actionType, boolean success, String message, ArrayList<Property> properties) {
             activity.isLoading(false);
             if (success) {
-                StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-                layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setHasFixedSize(false);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(new PropertiesAdapter(activity, properties));
-
-                PropertiesFragment.this.properties = new ArrayList<>();
-                PropertiesFragment.this.properties = properties;
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                 if (message.contains(activity.getResources().getString(R.string.internet_connecction))) {
